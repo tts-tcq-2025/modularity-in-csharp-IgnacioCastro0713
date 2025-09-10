@@ -8,7 +8,7 @@ namespace TelCo.ColorCoder;
 /// </summary>
 public class ColorPair
 {
-	static Color[] _majorColors, _minorColors;
+	private static Color[] _majorColors, _minorColors;
 	internal Color MajorColor, MinorColor;
 
 	public ColorPair() { }
