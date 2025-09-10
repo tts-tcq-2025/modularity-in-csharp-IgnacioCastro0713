@@ -40,10 +40,7 @@ public sealed class ColorCodeMapper
 
 	public string BuildReferenceManual()
 	{
-		var header = "Pair  | Major        | Minor\n" +
-					 "----- | ------------ | ------------\n";
-		var lines = _majorColors.SelectMany((major, mi) => _minorColors.Select((minor, ni) => $"{mi * _minorColors.Length + ni + 1,4} | {major.Name,-12} | {minor.Name,-12}"));
-
-		return header + string.Join(Environment.NewLine, lines);
+		return string.Join(Environment.NewLine,
+			_majorColors.SelectMany((maj, mi) => _minorColors.Select((min, ni) => $"{mi * _minorColors.Length + ni + 1,4} | {new ColorPair(maj, min)}")));
 	}
 }
