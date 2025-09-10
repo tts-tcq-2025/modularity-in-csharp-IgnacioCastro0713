@@ -2,36 +2,19 @@
 using System.Drawing;
 
 namespace TelCo.ColorCoder;
+
 /// <summary>
-/// data type defined to hold the two colors of clor pair
+/// data type defined to hold the two colors of color pair
 /// </summary>
 public class ColorPair
 {
-	private static Color[] _colorMapMajor;
-	/// <summary>
-	/// Array of minor colors
-	/// </summary>
-	private static Color[] _colorMapMinor;
+	static Color[] _majorColors, _minorColors;
+	internal Color MajorColor, MinorColor;
 
+	public ColorPair() { }
+	public ColorPair(Color[] majorColors, Color[] minorColors) { _majorColors = majorColors; _minorColors = minorColors; }
 
-	internal Color MajorColor;
-	internal Color MinorColor;
-	public override string ToString()
-	{
-		return $"MajorColor:{MajorColor.Name}, MinorColor:{MinorColor.Name}";
-	}
-
-	public ColorPair(Color[] majorColor, Color[] minorColors)
-	{
-		_colorMapMajor = majorColor;
-		_colorMapMinor = minorColors;
-	}
-
-
-
-	public ColorPair()
-	{
-	}
+	public override string ToString() => $"MajorColor:{MajorColor.Name}, MinorColor:{MinorColor.Name}";
 
 
 	/// <summary>
@@ -41,29 +24,14 @@ public class ColorPair
 	/// <returns></returns>
 	public ColorPair GetColorFromPairNumber(int pairNumber)
 	{
-		// The function supports only 1 based index. Pair numbers valid are from 1 to 25
-		int minorSize = _colorMapMinor.Length;
-		int majorSize = _colorMapMajor.Length;
-		if (pairNumber < 1 || pairNumber > minorSize * majorSize)
-		{
-			throw new ArgumentOutOfRangeException($"Argument PairNumber:{pairNumber} is outside the allowed range");
-		}
+		int minorCount = _minorColors.Length, majorCount = _majorColors.Length;
+		if (pairNumber < 1 || pairNumber > minorCount * majorCount)
+			throw new ArgumentOutOfRangeException(nameof(pairNumber), $"PairNumber:{pairNumber} is outside the allowed range");
 
-		// Find index of major and minor color from pair number
-		int zeroBasedPairNumber = pairNumber - 1;
-		int majorIndex = zeroBasedPairNumber / minorSize;
-		int minorIndex = zeroBasedPairNumber % minorSize;
-
-		// Construct the return val from the arrays
-		ColorPair pair = new ColorPair
-		{
-			MajorColor = _colorMapMajor[majorIndex],
-			MinorColor = _colorMapMinor[minorIndex]
-		};
-
-		// return the value
-		return pair;
+		int index = pairNumber - 1;
+		return new ColorPair { MajorColor = _majorColors[index / minorCount], MinorColor = _minorColors[index % minorCount] };
 	}
+
 	/// <summary>
 	/// Given the two colors the function returns the pair number corresponding to them
 	/// </summary>
@@ -71,35 +39,11 @@ public class ColorPair
 	/// <returns></returns>
 	public int GetPairNumberFromColor(ColorPair pair)
 	{
-		// Find the major color in the array and get the index
-		int majorIndex = -1;
-		for (int i = 0; i < _colorMapMajor.Length; i++)
-		{
-			if (_colorMapMajor[i] == pair.MajorColor)
-			{
-				majorIndex = i;
-				break;
-			}
-		}
+		int majorIndex = Array.IndexOf(_majorColors, pair.MajorColor);
+		int minorIndex = Array.IndexOf(_minorColors, pair.MinorColor);
+		if (majorIndex < 0 || minorIndex < 0)
+			throw new ArgumentException($"Unknown Colors: {pair}");
 
-		// Find the minor color in the array and get the index
-		int minorIndex = -1;
-		for (int i = 0; i < _colorMapMinor.Length; i++)
-		{
-			if (_colorMapMinor[i] == pair.MinorColor)
-			{
-				minorIndex = i;
-				break;
-			}
-		}
-		// If colors can not be found throw an exception
-		if (majorIndex == -1 || minorIndex == -1)
-		{
-			throw new ArgumentException($"Unknown Colors: {pair.ToString()}");
-		}
-
-		// Compute pair number and Return  
-		// (Note: +1 in compute is because pair number is 1 based, not zero)
-		return (majorIndex * _colorMapMinor.Length) + (minorIndex + 1);
+		return majorIndex * _minorColors.Length + minorIndex + 1;
 	}
 }
