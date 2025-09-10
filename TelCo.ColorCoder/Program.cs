@@ -36,6 +36,6 @@ pairNumber = mapper.GetPairNumberFromColor(pair2);
 Console.WriteLine($"[In]Colors: {pair2}, [Out] PairNumber: {pairNumber}");
 Debug.Assert(pairNumber == 6);
 
-// ===== MANUAL DE REFERENCIA =====
+// ===== MANUAL DE REFERENCE =====
 Console.WriteLine("\n=== Color Code Reference Manual ===\n");
 Console.WriteLine(mapper.BuildReferenceManual());
