@@ -16,7 +16,6 @@ public class ColorPair
 
 	public override string ToString() => $"MajorColor:{MajorColor.Name}, MinorColor:{MinorColor.Name}";
 
-
 	/// <summary>
 	/// Given a pair number function returns the major and minor colors in that order
 	/// </summary>
