@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 
 namespace TelCo.ColorCoder;
 
@@ -38,9 +38,11 @@ public sealed class ColorCodeMapper
 		return majorIndex * _minorColors.Length + minorIndex + 1;
 	}
 
-	public string BuildReferenceManual()
+	public IEnumerable<(int PairNumber, ColorPair Pair)> GetAllPairs()
 	{
-		return string.Join(Environment.NewLine,
-			_majorColors.SelectMany((maj, mi) => _minorColors.Select((min, ni) => $"{mi * _minorColors.Length + ni + 1,4} | {new ColorPair(maj, min)}")));
+		for (int mi = 0; mi < _majorColors.Length; mi++)
+			for (int ni = 0; ni < _minorColors.Length; ni++)
+				yield return (mi * _minorColors.Length + ni + 1,
+					new ColorPair(_majorColors[mi], _minorColors[ni]));
 	}
 }
