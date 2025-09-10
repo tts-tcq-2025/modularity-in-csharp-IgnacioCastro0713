@@ -24,7 +24,8 @@ public class ColorPair
 	/// <returns></returns>
 	public ColorPair GetColorFromPairNumber(int pairNumber)
 	{
-		int minorCount = _minorColors.Length, majorCount = _majorColors.Length;
+		int minorCount = _minorColors.Length;
+		int majorCount = _majorColors.Length;
 		if (pairNumber < 1 || pairNumber > minorCount * majorCount)
 			throw new ArgumentOutOfRangeException(nameof(pairNumber), $"PairNumber:{pairNumber} is outside the allowed range");
 
@@ -43,7 +44,6 @@ public class ColorPair
 		int minorIndex = Array.IndexOf(_minorColors, pair.MinorColor);
 		if (majorIndex < 0 || minorIndex < 0)
 			throw new ArgumentException($"Unknown Colors: {pair}");
-
 		return majorIndex * _minorColors.Length + minorIndex + 1;
 	}
 }
